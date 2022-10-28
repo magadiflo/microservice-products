@@ -42,6 +42,17 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-config</artifactId>
+		</dependency>
+		<!-- La dependencia de abajo permite que funcione correctamente esta aplicación (microservice-products)
+		como cliente del servidor de configuraciones. Esto en caso de que estemos usando
+		una versión de SpringBoot igual o superior a la 2.4.0 -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-bootstrap</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
