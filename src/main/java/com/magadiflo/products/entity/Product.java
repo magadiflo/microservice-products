@@ -7,11 +7,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "products")
 public class Product implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -20,6 +21,11 @@ public class Product implements Serializable {
 	private String name;
 	private Double price;
 	private String description;
+
+	// @Transient, Indica que este atributo port no será persistente, es decir,
+	// no se mapea a ningún campo de la BD
+	@Transient
+	private Integer port;
 
 	public Integer getId() {
 		return id;
@@ -53,6 +59,14 @@ public class Product implements Serializable {
 		this.description = description;
 	}
 
+	public Integer getPort() {
+		return port;
+	}
+
+	public void setPort(Integer port) {
+		this.port = port;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -64,6 +78,8 @@ public class Product implements Serializable {
 		builder.append(price);
 		builder.append(", description=");
 		builder.append(description);
+		builder.append(", port=");
+		builder.append(port);
 		builder.append("]");
 		return builder.toString();
 	}

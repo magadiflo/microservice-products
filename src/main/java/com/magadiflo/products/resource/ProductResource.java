@@ -1,7 +1,10 @@
 package com.magadiflo.products.resource;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,9 @@ import com.magadiflo.products.service.IProductService;
 @RequestMapping(path = "/api/v1/products")
 public class ProductResource {
 
+	@Autowired
+	private Environment env; // Para obtener a partir del local.server.port el puerto aleatorio
+
 	private final IProductService productService;
 
 	public ProductResource(IProductService productService) {
@@ -27,12 +33,17 @@ public class ProductResource {
 
 	@GetMapping
 	public List<Product> productList() {
-		return this.productService.findAll();
+		return this.productService.findAll().stream().map(product -> {
+			product.setPort(Integer.parseInt(this.env.getProperty("local.server.port")));
+			return product;
+		}).collect(Collectors.toList());
 	}
 
 	@GetMapping(path = "/{id}")
 	public Product showProduct(@PathVariable Integer id) {
-		return this.productService.findById(id);
+		Product product = this.productService.findById(id);
+		product.setPort(Integer.parseInt(this.env.getProperty("local.server.port")));
+		return product;
 	}
 
 	@PostMapping
