@@ -1,6 +1,7 @@
 package com.magadiflo.products.resource;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,16 @@ public class ProductResource {
 	}
 
 	@GetMapping(path = "/{id}")
-	public Product showProduct(@PathVariable Integer id) {
+	public Product showProduct(@PathVariable Integer id) throws InterruptedException {
+		// ****** Simulando una falla para ver el comportamiento del CircuitBreaker
+		if (id.equals(10)) {
+			throw new IllegalStateException("Not found product with id = 10");
+		}
+
+		if (id.equals(7)) {
+			TimeUnit.SECONDS.sleep(5L);
+		}
+		// ******
 		Product product = this.productService.findById(id);
 		product.setPort(Integer.parseInt(this.env.getProperty("local.server.port")));
 		return product;
